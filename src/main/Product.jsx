@@ -1,38 +1,41 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import ProductCard from "./ProductCard";
 import "./Product.scss";
 import axios from "axios";
 
+const fetchData = async () => {
+  const data = await axios.get("/api/internet-packages");
+  return data;
+};
+
 const Product = () => {
-  // useEffect(() => {
-  //     fetch("/api/users")
-  //       .then((response) => response.json())
-  //       .then((json) => setUsers(json))
-  //   }, [])
+  const { isPending, error, data, isFetching } = useQuery({
+    queryKey: ["internetPackages"],
+    queryFn: fetchData,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await axios.get("/api/internet-packages");
-      console.log(data);
-    };
+  if (isPending || isFetching) return "Loading...";
 
-    fetchData();
-  }, []);
+  if (error) return "An error has occurred: " + error.message;
 
-  return (
-    <div className="product-wrapper">
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-    </div>
-  );
+  const internetPackages = data.data.internetPackages;
+
+  const renderedProducts = internetPackages.map((product, index) => {
+    return (
+      <ProductCard
+        key={index}
+        name={product.name}
+        pricePerMonth={product.pricePerMonth}
+        quota={product.internetPackageType.quota}
+        speed={product.internetSpeed.speed}
+        description={product.description}
+      />
+    );
+  });
+
+  return <div className="product-wrapper">{renderedProducts}</div>;
 };
 
 export default Product;

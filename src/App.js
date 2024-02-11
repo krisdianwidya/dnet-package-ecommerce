@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Layout } from "antd";
 import { Menu } from "antd";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import Product from "./main/Product";
 import Item from "./keranjang/Item";
@@ -17,6 +18,8 @@ const items = [
   },
 ];
 
+const queryClient = new QueryClient();
+
 const App = () => {
   const [current, setCurrent] = useState("main");
   const onClick = (e) => {
@@ -25,35 +28,37 @@ const App = () => {
   };
 
   return (
-    <Layout>
-      <Menu
-        onClick={onClick}
-        selectedKeys={[current]}
-        mode="horizontal"
-        items={items}
-        style={{ padding: "0 200px" }}
-      />
-      <Layout style={{ height: "100%" }}>
-        <Content
-          style={{
-            height: "100%",
-            backgroundColor: "#fff",
-            // border: "1px solid black",
-          }}
-        >
-          <Product />
-        </Content>
-        <Sider
-          width="25%"
-          style={{
-            backgroundColor: "#fff",
-            //   border: "1px solid black"
-          }}
-        >
-          <Item />
-        </Sider>
+    <QueryClientProvider client={queryClient}>
+      <Layout>
+        <Menu
+          onClick={onClick}
+          selectedKeys={[current]}
+          mode="horizontal"
+          items={items}
+          style={{ padding: "0 200px" }}
+        />
+        <Layout style={{ height: "100%" }}>
+          <Content
+            style={{
+              height: "100%",
+              backgroundColor: "#fff",
+              // border: "1px solid black",
+            }}
+          >
+            <Product />
+          </Content>
+          <Sider
+            width="25%"
+            style={{
+              backgroundColor: "#fff",
+              //   border: "1px solid black"
+            }}
+          >
+            <Item />
+          </Sider>
+        </Layout>
       </Layout>
-    </Layout>
+    </QueryClientProvider>
   );
 };
 export default App;
