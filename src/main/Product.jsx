@@ -1,11 +1,11 @@
 // import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 import ProductCard from "./ProductCard";
 import "./Product.scss";
-import axios from "axios";
 
-const fetchData = async () => {
+const fetchProducts = async () => {
   const data = await axios.get("/api/internet-packages");
   return data;
 };
@@ -13,16 +13,16 @@ const fetchData = async () => {
 const Product = () => {
   const { isPending, error, data, isFetching } = useQuery({
     queryKey: ["internetPackages"],
-    queryFn: fetchData,
+    queryFn: fetchProducts,
   });
 
   if (isPending || isFetching) return "Loading...";
 
   if (error) return "An error has occurred: " + error.message;
 
-  const internetPackages = data.data.internetPackages;
+  const internetPackagesResult = data.data.internetPackages;
 
-  const renderedProducts = internetPackages.map((product, index) => {
+  const renderedProducts = internetPackagesResult.map((product, index) => {
     return (
       <ProductCard
         key={index}
