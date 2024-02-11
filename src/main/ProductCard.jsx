@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import dnetLogo from "../dnet-logo.jpg";
 import "./ProductCard.scss";
+import { useState, useEffect } from "react";
 
 const ProductCard = ({
   name,
@@ -12,6 +13,8 @@ const ProductCard = ({
   description,
   inetPackageId,
 }) => {
+  const [isInCart, setIsInCart] = useState(false);
+
   const postOrder = async () => {
     const data = await axios.post("/api/order-details", {
       internetPackageId: inetPackageId,
@@ -34,7 +37,18 @@ const ProductCard = ({
 
   const handleClick = () => {
     mutate();
+    setIsInCart(true);
   };
+
+  const cartOrderData = queryClient.getQueriesData({ queryKey: ["cartOrder"] });
+
+  useEffect(() => {
+    cartOrderData[0][1].data?.order?.orderDetails.forEach((element) => {
+      if (element.internetPackage.id === inetPackageId) {
+        setIsInCart(true);
+      }
+    });
+  }, [cartOrderData, inetPackageId]);
 
   if (isPending) return "Loading...";
 
@@ -49,14 +63,20 @@ const ProductCard = ({
       <p className="product-description">{description}</p>
 
       <div className="product-btn-wrapper">
-        <Button
-          onClick={handleClick}
-          type="primary"
-          shape="round"
-          size="middle"
-        >
-          Tambah ke keranjang
-        </Button>
+        {isInCart ? (
+          <Button disabled type="primary" shape="round" size="middle">
+            Paket sudah di keranjang
+          </Button>
+        ) : (
+          <Button
+            onClick={handleClick}
+            type="primary"
+            shape="round"
+            size="middle"
+          >
+            Tambah ke keranjang
+          </Button>
+        )}
       </div>
     </Card>
   );
