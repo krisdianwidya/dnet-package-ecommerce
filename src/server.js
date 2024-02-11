@@ -267,9 +267,10 @@ export function makeServer() {
       this.post("/order-details", (schema, request) => {
         let attrs = JSON.parse(request.requestBody);
 
-        schema.orderDetails.create(attrs);
-        return schema.orders.find(1);
+        return schema.orderDetails.create(attrs);
       });
+
+      this.del("/order-details/:id");
     },
   });
 

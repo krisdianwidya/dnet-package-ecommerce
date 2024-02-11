@@ -40,6 +40,7 @@ const Item = () => {
           key={index}
           name={item.internetPackage.name}
           price={item.price}
+          itemId={item.id}
         />
       );
     }
