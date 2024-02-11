@@ -203,7 +203,7 @@ export function makeServer() {
       let order1 = server.create("order", {
         customer: cust1,
         date: "2024-02-10T03:55:01.221Z",
-        isPaid: false,
+        total: 400000,
       });
 
       server.create("orderDetail", {
@@ -240,6 +240,14 @@ export function makeServer() {
         include: ["internetPackageType", "internetSpeed"],
         embed: true,
       }),
+      order: RestSerializer.extend({
+        include: ["orderDetails", "internetPackage"],
+        embed: true,
+      }),
+      orderDetail: RestSerializer.extend({
+        include: ["internetPackage"],
+        embed: true,
+      }),
     },
 
     routes() {
@@ -248,6 +256,12 @@ export function makeServer() {
 
       this.get("/internet-packages", (schema) => {
         return schema.internetPackages.all();
+      });
+
+      this.get("/orders/:id", (schema, request) => {
+        let id = request.params.id;
+
+        return schema.orders.find(id);
       });
     },
   });
