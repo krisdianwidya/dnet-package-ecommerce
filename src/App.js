@@ -22,6 +22,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [current, setCurrent] = useState("main");
+
   const onClick = (e) => {
     console.log("click ", e);
     setCurrent(e.key);
@@ -42,7 +43,6 @@ const App = () => {
             style={{
               height: "100%",
               backgroundColor: "#fff",
-              // border: "1px solid black",
             }}
           >
             <Product />
@@ -51,7 +51,6 @@ const App = () => {
             width="25%"
             style={{
               backgroundColor: "#fff",
-              //   border: "1px solid black"
             }}
           >
             <Item />
