@@ -1,0 +1,29 @@
+.product {
+  &-title,
+  &-speed,
+  &-description {
+    margin: 0;
+    padding: 0;
+  }
+
+  &-description {
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  &-price {
+    margin: 5px 0 8px;
+  }
+
+  &-card {
+    margin: 15px;
+  }
+
+  &-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #d3d3d3;
+  }
+}
