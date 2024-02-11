@@ -203,7 +203,7 @@ export function makeServer() {
       let order1 = server.create("order", {
         customer: cust1,
         date: "2024-02-10T03:55:01.221Z",
-        total: 400000,
+        // total: 400000,
       });
 
       server.create("orderDetail", {
@@ -262,6 +262,13 @@ export function makeServer() {
         let id = request.params.id;
 
         return schema.orders.find(id);
+      });
+
+      this.post("/order-details", (schema, request) => {
+        let attrs = JSON.parse(request.requestBody);
+
+        schema.orderDetails.create(attrs);
+        return schema.orders.find(1);
       });
     },
   });
