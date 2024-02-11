@@ -1,4 +1,10 @@
-import { createServer, Model, hasMany, belongsTo } from "miragejs";
+import {
+  createServer,
+  Model,
+  hasMany,
+  belongsTo,
+  RestSerializer,
+} from "miragejs";
 
 export function makeServer() {
   let server = createServer({
@@ -93,19 +99,19 @@ export function makeServer() {
 
       let inetSpeed1 = server.create("internetSpeed", {
         //   id: 1,
-        quota: "15 Mbps",
+        speed: "15 Mbps",
       });
       let inetSpeed2 = server.create("internetSpeed", {
         //   id: 2,
-        quota: "20 Mbps",
+        speed: "20 Mbps",
       });
       let inetSpeed3 = server.create("internetSpeed", {
         //   id: 3,
-        quota: "50 Mbps",
+        speed: "50 Mbps",
       });
       let inetSpeed4 = server.create("internetSpeed", {
         //   id: 4,
-        quota: "80 Mbps",
+        speed: "80 Mbps",
       });
 
       let inetPackage1 = server.create("internetPackage", {
@@ -227,6 +233,13 @@ export function makeServer() {
         activePackage: activePkg1,
         remainQuota: "unlimited",
       });
+    },
+
+    serializers: {
+      internetPackage: RestSerializer.extend({
+        include: ["internetPackageType", "internetSpeed"],
+        embed: true,
+      }),
     },
 
     routes() {
