@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Card } from "antd";
 import axios from "axios";
@@ -17,16 +16,11 @@ const Item = () => {
     queryFn: fetchCartOrder,
   });
 
-  const [totalBayar, setTotalBayar] = useState(0);
-
-  useEffect(() => {
-    setTotalBayar(data.data.order.total);
-  }, [data.data.order.total]);
-
   if (isPending || isFetching) return "Loading...";
   if (error) return "An error has occurred: " + error.message;
 
   const cartOrderResult = data.data.order.orderDetails;
+  const totalBayar = data.data.order.total;
   const renderedCartOrder = cartOrderResult.map((item, index) => {
     return (
       <ItemCard
